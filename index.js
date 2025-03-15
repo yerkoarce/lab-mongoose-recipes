@@ -26,17 +26,27 @@ async function manageRecipes() {
     })
 
     // Update recipe duration
-    await Recipe.findOneAndUpdate({ title: 'Rigatoni alla Genovese' }, { duration: 100 }, {new: true})
-      .then(updateRecipe => {
-        if (updateRecipe) {
-          console.log('Recipe update: ', updateRecipe)
-        } else {
-          console.log("Don't find recipe")
-        }
-      })
-      .catch(error => {
-        console.error('Error to update recipe: ', error)
-      })
+    const updatedRecipe = await Recipe.findOneAndUpdate(
+      { title: 'Rigatoni alla Genovese' },
+      { duration: 100 },
+      { new: true } 
+    );
+  
+    if (updatedRecipe) {
+      console.log('Recipe updated:', updatedRecipe);
+    } else {
+      console.log("Recipe not found");
+    }
+    
+
+    // Delete one recipe
+    const result = await Recipe.deleteOne({ title: 'Carrot Cake' });
+
+    if (result.deletedCount > 0) {
+      console.log('Recipe removed!');
+    } else {
+      console.log("Recipe not found.");
+    }
 
     // Disconnect from the database
     await mongoose.disconnect();
